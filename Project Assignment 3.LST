@@ -1,0 +1,302 @@
+SQL> SELECT COUNT(*)
+  2  FROM CLIENTS;
+
+  COUNT(*)                                                                      
+----------                                                                      
+         4                                                                      
+
+SQL> SELECT COUNT(*),SUM(SAL)
+  2  ;
+
+*
+ERROR at line 2:
+ORA-00923: FROM keyword not found where expected 
+
+
+SQL> SELECT COUNT(*),SUM(SALARY)
+  2  FROM EMPLOYEES;
+
+  COUNT(*) SUM(SALARY)                                                          
+---------- -----------                                                          
+        11      395000                                                          
+
+SQL> SELECT MAX(SAL)
+  2  FROM EMPLOYEES
+  3  GROUP BY DEPTNO;
+SELECT MAX(SAL)
+           *
+ERROR at line 1:
+ORA-00904: "SAL": invalid identifier 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT MAX(SALARY)
+  2  FROM EMPLOYEES
+  3* GROUP BY DEPTNO
+SQL> /
+
+MAX(SALARY)                                                                     
+-----------                                                                     
+      35000                                                                     
+      45000                                                                     
+      30000                                                                     
+      65000                                                                     
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT MIN(SALARY)
+  2  FROM EMPLOYEES
+  3* GROUP BY JOB
+SQL> /
+
+MIN(SALARY)                                                                     
+-----------                                                                     
+      30000                                                                     
+      65000                                                                     
+      20000                                                                     
+      40000                                                                     
+      30000                                                                     
+      30000                                                                     
+
+6 rows selected.
+
+SQL> SELECT AVG(SAL) FROM EMPLOYEES;
+SELECT AVG(SAL) FROM EMPLOYEES
+           *
+ERROR at line 1:
+ORA-00904: "SAL": invalid identifier 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1* SELECT AVG(SALARY) FROM EMPLOYEES
+SQL> /
+
+AVG(SALARY)                                                                     
+-----------                                                                     
+ 35909.0909                                                                     
+
+SQL> SELECT SUM(BUDGET)
+  2  FROM PROJECTS;
+
+SUM(BUDGET)                                                                     
+-----------                                                                     
+     775000                                                                     
+
+SQL> SELECT COUNT(*)
+  2  FROM  EMPPROJECTTASK
+  3  WHERE TASK = 'CODING';
+
+  COUNT(*)                                                                      
+----------                                                                      
+         3                                                                      
+
+SQL> SELECT COUNT(SALARY),SUM(SALARY)
+  2  FROM EMPLOYEES
+  3  GROUP BY DEPTNO;
+
+COUNT(SALARY) SUM(SALARY)                                                       
+------------- -----------                                                       
+            2       65000                                                       
+            3      125000                                                       
+            1       30000                                                       
+            5      175000                                                       
+
+SQL> SELECT CNAME,DESCR,START_DATE,BUDGET
+  2  FROM CLIENT INNER JOIN PROJECTS
+  3  ON CLIENT.CLIENTID = PROJECTS.CLIENTID;
+FROM CLIENT INNER JOIN PROJECTS
+     *
+ERROR at line 2:
+ORA-00942: table or view does not exist 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT CNAME,DESCR,START_DATE,BUDGET
+  2  FROM CLIENTS INNER JOIN PROJECTS
+  3* ON CLIENTS.CLIENTID = PROJECTS.CLIENTID
+SQL> /
+
+CNAME                                    DESCR                                  
+---------------------------------------- ------------------------------         
+START_DAT     BUDGET                                                            
+--------- ----------                                                            
+ACME UTILITIES                           INVENTORY                              
+01-APR-11     150000                                                            
+                                                                                
+TRACKON CONSULTANTS                      ACCOUNTING                             
+01-AUG-11     500000                                                            
+                                                                                
+MONEYSAVERDISTRIBUTORS                   PAYROLL                                
+01-OCT-11      75000                                                            
+                                                                                
+
+CNAME                                    DESCR                                  
+---------------------------------------- ------------------------------         
+START_DAT     BUDGET                                                            
+--------- ----------                                                            
+LAWFUL CORP                              CONTACT MGMT                           
+01-NOV-11      50000                                                            
+                                                                                
+
+SQL> SET PAGES 100 LINES 100
+SQL> /
+
+CNAME                                    DESCR                          START_DAT     BUDGET        
+---------------------------------------- ------------------------------ --------- ----------        
+ACME UTILITIES                           INVENTORY                      01-APR-11     150000        
+TRACKON CONSULTANTS                      ACCOUNTING                     01-AUG-11     500000        
+MONEYSAVERDISTRIBUTORS                   PAYROLL                        01-OCT-11      75000        
+LAWFUL CORP                              CONTACT MGMT                   01-NOV-11      50000        
+
+SQL> SELECT DNAME,ENAME,JOB
+  2  FROM DEPARTMENT INNER JOIN EMPLOYEES
+  3  ON DEPARTMENT.DEPTNO = EMPLOYEES.DEPTNO;
+
+DNAME           ENAME                JOB                                                            
+--------------- -------------------- ---------------                                                
+DESIGN          SANDEEP              ANALYST                                                        
+DESIGN          RAJESH               DESIGNER                                                       
+DEVELOPMENT     MADHAV               DEVELOPER                                                      
+DEVELOPMENT     MANOJ                DEVELOPER                                                      
+DESIGN          ABHAY                DESIGNER                                                       
+TESTING         UMA                  TESTER                                                         
+DOCUMENT        GITA                 TECHWRITER                                                     
+TESTING         PRIYA                TESTER                                                         
+DEVELOPMENT     NUTAN                DEVELOPER                                                      
+DESIGN          SMITA                ANALYST                                                        
+DESIGN          ANAND                PROJECTMGR                                                     
+
+11 rows selected.
+
+SQL> SELECT DESCR,TASK
+  2  FROM PROJECTS P INNER JOIN EMPPROJECTTASK E
+  3  ON P.PROJECTID = E.PROJECTID
+  4  WHERE TASK = 'SYSTEM ANALYSIS';
+
+DESCR                          TASK                                                                 
+------------------------------ -------------------------                                            
+INVENTORY                      SYSTEM ANALYSIS                                                      
+ACCOUNTING                     SYSTEM ANALYSIS                                                      
+
+SQL> SELECT DESCR,ENAME
+  2  FROM PROJECTS P JOIN EMPPROJECTTASK
+  3  E ON P.PROJECTID = E.PROJECTID
+  4  JOIN EMPLOYEES EM
+  5  ON EM.EMPNO = E.EMPNO
+  6  WHERE E.TASK = 'SYSTEM ANALYSIS';
+
+DESCR                          ENAME                                                                
+------------------------------ --------------------                                                 
+INVENTORY                      SANDEEP                                                              
+ACCOUNTING                     SMITA                                                                
+
+SQL> SELECT COUNT(*)
+  2  FROM EMPLOYEES
+  3  GROUP BY JOB;
+
+  COUNT(*)                                                                                          
+----------                                                                                          
+         2                                                                                          
+         1                                                                                          
+         2                                                                                          
+         3                                                                                          
+         1                                                                                          
+         2                                                                                          
+
+6 rows selected.
+
+SQL> SELECT E.EMPNO
+  2  FROM EMPLOYEES E EMPPROJECTTASK EM
+  3  ON E.EMPNO = E.EMPNO;
+FROM EMPLOYEES E EMPPROJECTTASK EM
+                 *
+ERROR at line 2:
+ORA-00933: SQL command not properly ended 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT E.EMPNO
+  2  FROM EMPLOYEES E EMPPROJECTTASK EM
+  3* ON E.EMPNO = EM.EMPNO
+SQL> /
+FROM EMPLOYEES E EMPPROJECTTASK EM
+                 *
+ERROR at line 2:
+ORA-00933: SQL command not properly ended 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT EMPNO
+  2  FROM EMPLOYEES E  INNER JOIN EMPPROJECTTASK EM
+  3* ON E.EMPNO = EM.EMPNO
+SQL> /
+SELECT EMPNO
+       *
+ERROR at line 1:
+ORA-00918: column ambiguously defined 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT E.EMPNO
+  2  FROM EMPLOYEES E  INNER JOIN EMPPROJECTTASK EM
+  3* ON E.EMPNO = EM.EMPNO
+SQL> /
+
+     EMPNO                                                                                          
+----------                                                                                          
+      7001                                                                                          
+      7002                                                                                          
+      7003                                                                                          
+      7004                                                                                          
+      7006                                                                                          
+      7009                                                                                          
+      7008                                                                                          
+      7007                                                                                          
+      7011                                                                                          
+      7010                                                                                          
+      7002                                                                                          
+      7004                                                                                          
+
+12 rows selected.
+
+SQL> SELECT EMPNO
+  2  FROM EMPLOYEES
+  3  WHERE EMPNO NOT IN(SELECT EMPNO FROM EMPPROJECTTASK);
+
+     EMPNO                                                                                          
+----------                                                                                          
+      7005                                                                                          
+
+SQL> SELECT EMPNO
+  2  FROM EMPLOYEES
+  3  WHERE EMPNO IN (SELECT EMPNO FROM EMPPROJECTTASK);
+
+     EMPNO                                                                                          
+----------                                                                                          
+      7001                                                                                          
+      7002                                                                                          
+      7003                                                                                          
+      7004                                                                                          
+      7006                                                                                          
+      7007                                                                                          
+      7008                                                                                          
+      7009                                                                                          
+      7010                                                                                          
+      7011                                                                                          
+
+10 rows selected.
+
+SQL> SPOOL OFF;

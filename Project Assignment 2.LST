@@ -1,0 +1,491 @@
+SQL> SELECT *
+  2  FROM CLIENTS
+  3  WHERE BUSINESS = 'CONSULTANT';
+
+  CLIENTID CNAME                                                                
+---------- ----------------------------------------                             
+ADDRESS                        EMAIL                               PHONE        
+------------------------------ ------------------------------ ----------        
+BUSINESS                                                                        
+--------------------                                                            
+      1002 TRACKON CONSULTANTS                                                  
+MUMBAI                         consult@trackon.com            8734210090        
+CONSULTANT                                                                      
+                                                                                
+
+SQL> SET PAGES 200 LINES 200
+SQL> /
+
+  CLIENTID CNAME                                    ADDRESS                        EMAIL                               PHONE BUSINESS                                                                   
+---------- ---------------------------------------- ------------------------------ ------------------------------ ---------- --------------------                                                       
+      1002 TRACKON CONSULTANTS                      MUMBAI                         consult@trackon.com            8734210090 CONSULTANT                                                                 
+
+SQL> SET PAGES 100 LINES 100
+SQL> SELECT *
+  2  FROM EMPLOYEES
+  3  WHERE NOT JOB = 'DEVELOPER';
+
+     EMPNO ENAME                JOB                 SALARY     DEPTNO                               
+---------- -------------------- --------------- ---------- ----------                               
+      7001 SANDEEP              ANALYST              25000         10                               
+      7002 RAJESH               DESIGNER             30000         10                               
+      7005 ABHAY                DESIGNER             35000         10                               
+      7006 UMA                  TESTER               30000         30                               
+      7007 GITA                 TECHWRITER           30000         40                               
+      7008 PRIYA                TESTER               35000         30                               
+      7010 SMITA                ANALYST              20000         10                               
+      7011 ANAND                PROJECTMGR           65000         10                               
+
+8 rows selected.
+
+SQL> SELECT *
+  2  FROM PROJECT
+  3  WHERE BUDGET > 100000;
+FROM PROJECT
+     *
+ERROR at line 2:
+ORA-00942: table or view does not exist 
+
+
+SQL> SELECT * FROM TAB;
+
+TNAME                          TABTYPE  CLUSTERID                                                   
+------------------------------ ------- ----------                                                   
+DEPT                           TABLE                                                                
+EMP                            TABLE                                                                
+BONUS                          TABLE                                                                
+SALGRADE                       TABLE                                                                
+CLIENTS                        TABLE                                                                
+DEPARTMENT                     TABLE                                                                
+EMPLOYEES                      TABLE                                                                
+PROJECTS                       TABLE                                                                
+EMPPROJECTTASK                 TABLE                                                                
+STUDENT                        TABLE                                                                
+STUDENTDETAIL                  TABLE                                                                
+LIBRARY                        TABLE                                                                
+
+12 rows selected.
+
+SQL> SELECT *
+  2  FROM PROJECTS
+  3  WHERE BUDGET > 100000;
+
+ PROJECTID DESCR                          START_DAT PLANNED_E ACTUAL_EN     BUDGET   CLIENTID       
+---------- ------------------------------ --------- --------- --------- ---------- ----------       
+       401 INVENTORY                      01-APR-11 01-OCT-11 31-OCT-11     150000       1001       
+       402 ACCOUNTING                     01-AUG-11 01-JAN-12               500000       1002       
+
+SQL> SELECT * FROM PROJECTS
+  2  WHERE ACTUAL_END_DATE IS NOT NULL;
+
+ PROJECTID DESCR                          START_DAT PLANNED_E ACTUAL_EN     BUDGET   CLIENTID       
+---------- ------------------------------ --------- --------- --------- ---------- ----------       
+       401 INVENTORY                      01-APR-11 01-OCT-11 31-OCT-11     150000       1001       
+
+SQL> SELECT ENAME FROM EMPLOYEES
+  2  WHERE SUBSTR(ENAME,1,1) = 'M';
+
+ENAME                                                                                               
+--------------------                                                                                
+MADHAV                                                                                              
+MANOJ                                                                                               
+
+SQL> SELECT ENAME FROM EMPLOYEES
+  2  WHERE SUBSTR(ENAME,-1,1) = 'A';
+
+ENAME                                                                                               
+--------------------                                                                                
+UMA                                                                                                 
+GITA                                                                                                
+PRIYA                                                                                               
+SMITA                                                                                               
+
+SQL> SELECT * FROM PROJECTS;
+
+ PROJECTID DESCR                          START_DAT PLANNED_E ACTUAL_EN     BUDGET   CLIENTID       
+---------- ------------------------------ --------- --------- --------- ---------- ----------       
+       401 INVENTORY                      01-APR-11 01-OCT-11 31-OCT-11     150000       1001       
+       402 ACCOUNTING                     01-AUG-11 01-JAN-12               500000       1002       
+       403 PAYROLL                        01-OCT-11 31-DEC-11                75000       1003       
+       404 CONTACT MGMT                   01-NOV-11 31-DEC-11                50000       1004       
+
+SQL> SELECT ADD MONTHS(ACTUAL_END_DATE - START_DATE) FROM PROJECTS;
+SELECT ADD MONTHS(ACTUAL_END_DATE - START_DATE) FROM PROJECTS
+       *
+ERROR at line 1:
+ORA-00936: missing expression 
+
+
+SQL> SELECT TO_CHAR(ACTUAL_END_DATE,MM) -  TO_CHAR(START_DATE,MM) FROM PROJECTS;
+SELECT TO_CHAR(ACTUAL_END_DATE,MM) -  TO_CHAR(START_DATE,MM) FROM PROJECTS
+                                                         *
+ERROR at line 1:
+ORA-00904: "MM": invalid identifier 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1* SELECT TO_CHAR(ACTUAL_END_DATE,'MM') -  TO_CHAR(START_DATE,'MM') FROM PROJECTS
+SQL> /
+
+TO_CHAR(ACTUAL_END_DATE,'MM')-TO_CHAR(START_DATE,'MM')                                              
+------------------------------------------------------                                              
+                                                     6                                              
+                                                                                                    
+                                                                                                    
+                                                                                                    
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT (TO_CHAR(ACTUAL_END_DATE,'MM') -  TO_CHAR(START_DATE,'MM')) "NO OF MONTHS"  
+  2  FROM PROJECTS
+  3* WHERE DSCR = 'INVENTORY'
+SQL> /
+WHERE DSCR = 'INVENTORY'
+      *
+ERROR at line 3:
+ORA-00904: "DSCR": invalid identifier 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT (TO_CHAR(ACTUAL_END_DATE,'MM') -  TO_CHAR(START_DATE,'MM')) "NO OF MONTHS"  
+  2  FROM PROJECTS
+  3* WHERE DESCR = 'INVENTORY'
+SQL> /
+
+NO OF MONTHS                                                                                        
+------------                                                                                        
+           6                                                                                        
+
+SQL> SELECT *
+  2  FROM EMPPROJECTTASK
+  3  WHERE STATUS = 'IN PROGRESS';
+
+ PROJECTID      EMPNO START_DAT END_DATE  TASK                      STATUS                          
+---------- ---------- --------- --------- ------------------------- ---------------                 
+       402       7004 01-OCT-11           CODING                    IN PROGRESS                     
+
+SQL> SELECT *
+  2  FROM DEPARTMENT
+  3  WHERE LOC = 'PUNE';
+
+    DEPTNO DNAME           LOC                                                                      
+---------- --------------- --------------------                                                     
+        10 DESIGN          PUNE                                                                     
+        20 DEVELOPMENT     PUNE                                                                     
+
+SQL> SELECT ENAME,SALARY
+  2  FROM EMPLOYEES
+  3  ORDER BY SALARY DESC;
+
+ENAME                    SALARY                                                                     
+-------------------- ----------                                                                     
+ANAND                     65000                                                                     
+NUTAN                     45000                                                                     
+MADHAV                    40000                                                                     
+MANOJ                     40000                                                                     
+PRIYA                     35000                                                                     
+ABHAY                     35000                                                                     
+GITA                      30000                                                                     
+RAJESH                    30000                                                                     
+UMA                       30000                                                                     
+SANDEEP                   25000                                                                     
+SMITA                     20000                                                                     
+
+11 rows selected.
+
+SQL> SELECT TASKS
+  2  FROM EMPPROJECTTASK
+  3  ORDER BY END_DATE;
+SELECT TASKS
+       *
+ERROR at line 1:
+ORA-00904: "TASKS": invalid identifier 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT TASK
+  2  FROM EMPPROJECTTASK
+  3* ORDER BY END_DATE
+SQL> /
+
+TASK                                                                                                
+-------------------------                                                                           
+SYSTEM ANALYSIS                                                                                     
+SYSTEM DESIGN                                                                                       
+CODING                                                                                              
+SYSTEM ANALYSIS                                                                                     
+CODING                                                                                              
+TESTING                                                                                             
+SYSTEM DESIGN                                                                                       
+CODE CHANGE                                                                                         
+TESTING                                                                                             
+DOCUMENTATION                                                                                       
+SIGN OFF                                                                                            
+CODING                                                                                              
+
+12 rows selected.
+
+SQL> SELECT DISTICT JOB
+  2  FROM EMPLOYEES;
+SELECT DISTICT JOB
+       *
+ERROR at line 1:
+ORA-00904: "DISTICT": invalid identifier 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT DISTINCT JOB
+  2* FROM EMPLOYEES
+SQL> /
+
+JOB                                                                                                 
+---------------                                                                                     
+DESIGNER                                                                                            
+PROJECTMGR                                                                                          
+ANALYST                                                                                             
+DEVELOPER                                                                                           
+TECHWRITER                                                                                          
+TESTER                                                                                              
+
+6 rows selected.
+
+SQL> SELECT UPPER(ENAME)
+  2  FROM EMPLOYEES;
+
+UPPER(ENAME)                                                                                        
+--------------------                                                                                
+SANDEEP                                                                                             
+RAJESH                                                                                              
+MADHAV                                                                                              
+MANOJ                                                                                               
+ABHAY                                                                                               
+UMA                                                                                                 
+GITA                                                                                                
+PRIYA                                                                                               
+NUTAN                                                                                               
+SMITA                                                                                               
+ANAND                                                                                               
+
+11 rows selected.
+
+SQL> SELECT ENAME,SALARY,SALARY - 25/100 BONUS
+  2  FROM EMPLOYEES;
+
+ENAME                    SALARY      BONUS                                                          
+-------------------- ---------- ----------                                                          
+SANDEEP                   25000   24999.75                                                          
+RAJESH                    30000   29999.75                                                          
+MADHAV                    40000   39999.75                                                          
+MANOJ                     40000   39999.75                                                          
+ABHAY                     35000   34999.75                                                          
+UMA                       30000   29999.75                                                          
+GITA                      30000   29999.75                                                          
+PRIYA                     35000   34999.75                                                          
+NUTAN                     45000   44999.75                                                          
+SMITA                     20000   19999.75                                                          
+ANAND                     65000   64999.75                                                          
+
+11 rows selected.
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT ENAME,SALARY,SALARY -SALARY * 25/100 BONUS
+  2* FROM EMPLOYEES
+SQL> /
+
+ENAME                    SALARY      BONUS                                                          
+-------------------- ---------- ----------                                                          
+SANDEEP                   25000      18750                                                          
+RAJESH                    30000      22500                                                          
+MADHAV                    40000      30000                                                          
+MANOJ                     40000      30000                                                          
+ABHAY                     35000      26250                                                          
+UMA                       30000      22500                                                          
+GITA                      30000      22500                                                          
+PRIYA                     35000      26250                                                          
+NUTAN                     45000      33750                                                          
+SMITA                     20000      15000                                                          
+ANAND                     65000      48750                                                          
+
+11 rows selected.
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT ENAME,SALARY,SALARY -SALARY * 75/100 BONUS
+  2* FROM EMPLOYEES
+SQL> /
+
+ENAME                    SALARY      BONUS                                                          
+-------------------- ---------- ----------                                                          
+SANDEEP                   25000       6250                                                          
+RAJESH                    30000       7500                                                          
+MADHAV                    40000      10000                                                          
+MANOJ                     40000      10000                                                          
+ABHAY                     35000       8750                                                          
+UMA                       30000       7500                                                          
+GITA                      30000       7500                                                          
+PRIYA                     35000       8750                                                          
+NUTAN                     45000      11250                                                          
+SMITA                     20000       5000                                                          
+ANAND                     65000      16250                                                          
+
+11 rows selected.
+
+SQL> SELECT ENMAE || " WORK AS A " || JOB
+  2  FROM EMPLOYEES;
+SELECT ENMAE || " WORK AS A " || JOB
+                *
+ERROR at line 1:
+ORA-00904: " WORK AS A ": invalid identifier 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT ENMAE || ' WORK AS A ' || JOB
+  2* FROM EMPLOYEES
+SQL> /
+SELECT ENMAE || ' WORK AS A ' || JOB
+       *
+ERROR at line 1:
+ORA-00904: "ENMAE": invalid identifier 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT ENAME || ' WORK AS A ' || JOB
+  2* FROM EMPLOYEES
+SQL> /
+
+ENAME||'WORKASA'||JOB                                                                               
+----------------------------------------------                                                      
+SANDEEP WORK AS A ANALYST                                                                           
+RAJESH WORK AS A DESIGNER                                                                           
+MADHAV WORK AS A DEVELOPER                                                                          
+MANOJ WORK AS A DEVELOPER                                                                           
+ABHAY WORK AS A DESIGNER                                                                            
+UMA WORK AS A TESTER                                                                                
+GITA WORK AS A TECHWRITER                                                                           
+PRIYA WORK AS A TESTER                                                                              
+NUTAN WORK AS A DEVELOPER                                                                           
+SMITA WORK AS A ANALYST                                                                             
+ANAND WORK AS A PROJECTMGR                                                                          
+
+11 rows selected.
+
+SQL> SELECT TO_CHAR(START_DATE,'D') "DAY OF WEEKS
+  2  FROM PROJECTS;
+ERROR:
+ORA-01740: missing double quote in identifier 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT TO_CHAR(START_DATE,'D') "DAY OF WEEKS"
+  2* FROM PROJECTS
+SQL> /
+
+D                                                                                                   
+-                                                                                                   
+6                                                                                                   
+2                                                                                                   
+7                                                                                                   
+3                                                                                                   
+
+SQL> SET PAGES 500 LINES 500
+SQL> /
+
+D                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+6                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+7                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+3                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+
+SQL> SELECT LENGTH(SUBSTR(EMAIL,1) = '@') FROM CLIENTS;
+SELECT LENGTH(SUBSTR(EMAIL,1) = '@') FROM CLIENTS
+                              *
+ERROR at line 1:
+ORA-00907: missing right parenthesis 
+
+
+SQL> SELECT INSTR(EMAIL,'@') AS POSITION
+  2  FROM CLIENTS;
+
+  POSITION                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+----------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+         8                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+         8                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+         5                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+         8                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+
+SQL> SELECT SUBSTR(CNAME,1.3)
+  2  FROM CLIENTS;
+
+SUBSTR(CNAME,1.3)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+----------------------------------------                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+ACME UTILITIES                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+TRACKON CONSULTANTS                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+MONEYSAVERDISTRIBUTORS                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+LAWFUL CORP                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT SUBSTR(CNAME,1,3)
+  2* FROM CLIENTS
+SQL> /
+
+SUB                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+---                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+ACM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+TRA                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+MON                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+LAW                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+
+SQL> SELECT CONCAT('$',BUDGET)
+  2  FROM PROJECTS;
+
+CONCAT('$',BUDGET)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+-----------------------------------------                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+$150000                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+$500000                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+$75000                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+$50000                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+
+SQL> SELECT PLANNED_END_DATE,ADD_MONTHS(PLANNED_END_DATE,3) "REVIEW DATE"
+  2  FROM PROJECTS;
+
+PLANNED_E REVIEW DA                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+--------- ---------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+01-OCT-11 01-JAN-12                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+01-JAN-12 01-APR-12                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+31-DEC-11 31-MAR-12                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+31-DEC-11 31-MAR-12                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+
+SQL> SET PAGES 1000 LIENS 1000
+SP2-0158: unknown SET option "LIENS"
+SQL> SET PAGES 1000 LINES 1000
+SQL> /
+
+PLANNED_E REVIEW DA                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+--------- ---------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+01-OCT-11 01-JAN-12                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+01-JAN-12 01-APR-12                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+31-DEC-11 31-MAR-12                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+31-DEC-11 31-MAR-12                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+
+SQL> SPOOL OFF

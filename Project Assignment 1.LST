@@ -1,0 +1,1343 @@
+SQL> CREATE TABLE CLIENTS
+  2  ( CLIENTID NUMBER(4) PRIMARY KEY, CNAME VARCHAR2(40) NOT NULL,
+  3  ADDRESS VARCHAR2(30), EMAIL VARCHAR2(30) UNIQUE, PHONE NUMBER(10),
+  4     BUSINESS VARCHAR2(20));
+
+Table created.
+
+SQL> CREATE TABLE DEPARTMENT
+  2       ( DEPTNO NUMBER(2) PRIMARY KEY, DNAME VARCHAR2(15) NOT NULL, LOC VARCHAR2(20));
+
+Table created.
+
+SQL> CREATE TABLE EMPLOYEES
+  2  ( EMPNO NUMBER(4) PRIMARY KEY, ENAME VARCHAR2(20) NOT NULL, JOB VARCHAR2(15),
+  3  SALARY NUMBER(7),DEPTNO NUMBER(2), CONSTRAINT CHECKSAL CHECK (SALARY > 0),
+  4  CONSTRAINT FKDEPTNO FOREIGN KEY (DEPTNO) REFERENCES DEPARTMENT (DEPTNO));
+
+Table created.
+
+SQL> CREATE TABLE PROJECTS
+  2  ( PROJECTID NUMBER(3) PRIMARY KEY, DESCR VARCHAR2(30) NOT NULL,
+  3  START_DATE DATE, PLANNED_END_DATE DATE, ACTUAL_END_DATE DATE,BUDGET NUMBER(10),
+  4  CLIENTID NUMBER(4),CONSTRAINT PLANNEDDATE CHECK(PLANNED_END_DATE > ACTUAL_END_DATE),
+  5  CONSTRAINT BUDGETCHECK CHECK(BUDGET > 0),CONSTRAINT FKCLIENTID FOREIGN KEY (CLIENTID
+  6  ) REFERENCES CLIENTS (CLIENTID));
+
+Table created.
+
+SQL>  CREATE TABLE EMPPROJECTTASK
+  2  ( PROJECTID NUMBER(3), EMPNO NUMBER(4),START_DATE DATE,END_DATE DATE,TASK VARCHAR2(25) NOT NULL, STATUS VARCHAR2(15) NOT NULL,CONSTRAINT FKPROJECTID FOREIGN KEY (PROJECTID) REFERENCES PROJECTS (PROJECTID),CONSTRAINT FKEMPNO FOREIGN KEY (EMPNO) REFERENCES EMPLOYEES (EMPNO));
+
+Table created.
+
+SQL> INSERT INTO CLIENTS (CLIENTID,CNAME,ADDRESS,EMAIL,PHONE,BUSINESS) VALUES
+  2  (&CLIENTID,&CNAME,&ADDRESS,&EMAIL,&PHONE,&BUSINESS);
+Enter value for clientid: 1001
+Enter value for cname: 'ACME UTILITIES'
+Enter value for address: 'NOIDA'
+Enter value for email: 'contact@acmeutil.com'
+Enter value for phone: 9567880032
+Enter value for business: 'MANUFACTURING'
+old   2: (&CLIENTID,&CNAME,&ADDRESS,&EMAIL,&PHONE,&BUSINESS)
+new   2: (1001,'ACME UTILITIES','NOIDA','contact@acmeutil.com',9567880032,'MANUFACTURING')
+
+1 row created.
+
+SQL> /
+Enter value for clientid: 1002
+Enter value for cname: 'TRACKON CONSULTANTS'
+Enter value for address: 'MUMBAI'
+Enter value for email: 'consult@trackon.com'
+Enter value for phone: 8734210090
+Enter value for business: 'CONSULTANT'
+old   2: (&CLIENTID,&CNAME,&ADDRESS,&EMAIL,&PHONE,&BUSINESS)
+new   2: (1002,'TRACKON CONSULTANTS','MUMBAI','consult@trackon.com',8734210090,'CONSULTANT')
+
+1 row created.
+
+SQL> /
+Enter value for clientid: 1003
+Enter value for cname: 'KOLKATA'
+Enter value for address: KOLKATA
+Enter value for email: SAVE
+Enter value for phone: A
+Enter value for business: A
+old   2: (&CLIENTID,&CNAME,&ADDRESS,&EMAIL,&PHONE,&BUSINESS)
+new   2: (1003,'KOLKATA',KOLKATA,SAVE,A,A)
+(1003,'KOLKATA',KOLKATA,SAVE,A,A)
+                               *
+ERROR at line 2:
+ORA-00984: column not allowed here 
+
+
+SQL> /
+Enter value for clientid: 1003
+Enter value for cname: 'MONEYSAVERDISTRIBUTORS'
+Enter value for address: 'KOLKATA'
+Enter value for email: 'save@moneysaver.com'
+Enter value for phone: 7799886655
+Enter value for business: 'RESELLER'
+old   2: (&CLIENTID,&CNAME,&ADDRESS,&EMAIL,&PHONE,&BUSINESS)
+new   2: (1003,'MONEYSAVERDISTRIBUTORS','KOLKATA','save@moneysaver.com',7799886655,'RESELLER')
+
+1 row created.
+
+SQL> /
+Enter value for clientid: 1004
+Enter value for cname: 'LAWFUL CORP'
+Enter value for address: 'CHENNAI'
+Enter value for email: 'justice@lawful.com'
+Enter value for phone: 9210342219
+Enter value for business: 'PROFESSIONAL'
+old   2: (&CLIENTID,&CNAME,&ADDRESS,&EMAIL,&PHONE,&BUSINESS)
+new   2: (1004,'LAWFUL CORP','CHENNAI','justice@lawful.com',9210342219,'PROFESSIONAL')
+
+1 row created.
+
+SQL> INSERT INTO DEPARTMENT (DEPTNO,DNAME,LOC) VALUES
+  2  (&DEPTNO,&DNAME,&LOC)
+  3  ;
+Enter value for deptno: 10
+Enter value for dname: 'DESIGN'
+Enter value for loc: 'PUNE'
+old   2: (&DEPTNO,&DNAME,&LOC)
+new   2: (10,'DESIGN','PUNE')
+
+1 row created.
+
+SQL> /
+Enter value for deptno: 20
+Enter value for dname: 'DEVELOPMENT'
+Enter value for loc: 'PUNE'
+old   2: (&DEPTNO,&DNAME,&LOC)
+new   2: (20,'DEVELOPMENT','PUNE')
+
+1 row created.
+
+SQL> 30
+SP2-0226: Invalid line number 
+SQL> /
+Enter value for deptno: 30
+Enter value for dname: 'TESTING'
+Enter value for loc: 'MUMBAI'
+old   2: (&DEPTNO,&DNAME,&LOC)
+new   2: (30,'TESTING','MUMBAI')
+
+1 row created.
+
+SQL> /
+Enter value for deptno: 40
+Enter value for dname: 'DOCUMENT'
+Enter value for loc: 'MUMBAI'
+old   2: (&DEPTNO,&DNAME,&LOC)
+new   2: (40,'DOCUMENT','MUMBAI')
+
+1 row created.
+
+SQL> INSERT INTO EMPLOYEES (EMPNO,ENAME,JOB,SALARY,DEPTNO) VALUES
+  2  (&EMPNO,&ENAME,&JOB,&SALARY,&DEPTNO);
+Enter value for empno: 7001
+Enter value for ename: 'SANDEEP'
+Enter value for job: 'ANALYST'
+Enter value for salary: 25000
+Enter value for deptno: 10
+old   2: (&EMPNO,&ENAME,&JOB,&SALARY,&DEPTNO)
+new   2: (7001,'SANDEEP','ANALYST',25000,10)
+
+1 row created.
+
+SQL> /
+Enter value for empno: 7002
+Enter value for ename: 'RAJESH'
+Enter value for job: 'DESIGNER'
+Enter value for salary: 30000
+Enter value for deptno: 10
+old   2: (&EMPNO,&ENAME,&JOB,&SALARY,&DEPTNO)
+new   2: (7002,'RAJESH','DESIGNER',30000,10)
+
+1 row created.
+
+SQL> /
+Enter value for empno: 7003
+Enter value for ename: 'MADHAV'
+Enter value for job: 'DEVELOPMENT'
+Enter value for salary: 40000
+Enter value for deptno: 20
+old   2: (&EMPNO,&ENAME,&JOB,&SALARY,&DEPTNO)
+new   2: (7003,'MADHAV','DEVELOPMENT',40000,20)
+
+1 row created.
+
+SQL> /
+Enter value for empno: 7004
+Enter value for ename: 'MANOJ'
+Enter value for job: 'DEVELOPMENT'
+Enter value for salary: 40000
+Enter value for deptno: 20
+old   2: (&EMPNO,&ENAME,&JOB,&SALARY,&DEPTNO)
+new   2: (7004,'MANOJ','DEVELOPMENT',40000,20)
+
+1 row created.
+
+SQL> /
+Enter value for empno: 7005
+Enter value for ename: 'ABHAY'
+Enter value for job: 'DESIGNER'
+Enter value for salary: 35000
+Enter value for deptno: 10
+old   2: (&EMPNO,&ENAME,&JOB,&SALARY,&DEPTNO)
+new   2: (7005,'ABHAY','DESIGNER',35000,10)
+
+1 row created.
+
+SQL> UPDATE EMPLOYEES
+  2  SET JOB = 'DEVELOPER'
+  3  WHERE EMPNO = 7003;
+
+1 row updated.
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  UPDATE EMPLOYEES
+  2  SET JOB = 'DEVELOPER'
+  3* WHERE EMPNO = 7004
+SQL> /
+
+1 row updated.
+
+SQL> INSERT INTO EMPLOYEES (EMPNO,ENAME,JOB,SALARY,DEPTNO) VALUES
+  2  (&EMPNO,&ENAME,&JOB,&SALARY,&DEPTNO);
+Enter value for empno: 7006
+Enter value for ename: 'TESTER'
+Enter value for job: 30000  ED
+Enter value for salary: ED
+Enter value for deptno: ED
+old   2: (&EMPNO,&ENAME,&JOB,&SALARY,&DEPTNO)
+new   2: (7006,'TESTER',30000  ED,ED,ED)
+(7006,'TESTER',30000  ED,ED,ED)
+                      *
+ERROR at line 2:
+ORA-00917: missing comma 
+
+
+SQL> /
+Enter value for empno: 7006
+Enter value for ename: 'UMA'
+Enter value for job: 'TESTER'
+Enter value for salary: 30000
+Enter value for deptno: 30
+old   2: (&EMPNO,&ENAME,&JOB,&SALARY,&DEPTNO)
+new   2: (7006,'UMA','TESTER',30000,30)
+
+1 row created.
+
+SQL> /
+Enter value for empno: 7007
+Enter value for ename: 'GITA'
+Enter value for job: 'TECHWRITER'
+Enter value for salary: 30000
+Enter value for deptno: 40
+old   2: (&EMPNO,&ENAME,&JOB,&SALARY,&DEPTNO)
+new   2: (7007,'GITA','TECHWRITER',30000,40)
+
+1 row created.
+
+SQL> /
+Enter value for empno: 7008
+Enter value for ename: 'PRIYA'
+Enter value for job: 'TESTER'
+Enter value for salary: 35000
+Enter value for deptno: 30
+old   2: (&EMPNO,&ENAME,&JOB,&SALARY,&DEPTNO)
+new   2: (7008,'PRIYA','TESTER',35000,30)
+
+1 row created.
+
+SQL> /
+Enter value for empno: 7009
+Enter value for ename: 'NUTAN'
+Enter value for job: 'DEVELOPER'
+Enter value for salary: 45000
+Enter value for deptno: 20
+old   2: (&EMPNO,&ENAME,&JOB,&SALARY,&DEPTNO)
+new   2: (7009,'NUTAN','DEVELOPER',45000,20)
+
+1 row created.
+
+SQL> /
+Enter value for empno: 7010
+Enter value for ename: 'SMITA'
+Enter value for job: 'ANALYST'
+Enter value for salary: 20000
+Enter value for deptno: 10
+old   2: (&EMPNO,&ENAME,&JOB,&SALARY,&DEPTNO)
+new   2: (7010,'SMITA','ANALYST',20000,10)
+
+1 row created.
+
+SQL> /
+Enter value for empno: 7011
+Enter value for ename: 'ANAND'
+Enter value for job: 'PROJECTMGR'
+Enter value for salary: 65000
+Enter value for deptno: 10
+old   2: (&EMPNO,&ENAME,&JOB,&SALARY,&DEPTNO)
+new   2: (7011,'ANAND','PROJECTMGR',65000,10)
+
+1 row created.
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1* INSERT INTO PROJECTS (PROJECTID,DESCR,START_DATE,PLANNED_END_DATE,ACTUAL_END_DATE,BUDGET,CLIENTID) VALUES (401,'INVENTORY','01-APR-11','01-OCT-11','31-OCT-11',150000,1001)
+  2  /
+INSERT INTO PROJECTS (PROJECTID,DESCR,START_DATE,PLANNED_END_DATE,ACTUAL_END_DATE,BUDGET,CLIENTID) VALUES (401,'INVENTORY','01-APR-11','01-OCT-11','31-OCT-11',150000,1001)
+*
+ERROR at line 1:
+ORA-02290: check constraint (SCOTT.PLANNEDDATE) violated 
+
+
+SQL> SELECT *
+  2  FROM USER_CONSTRAINTS WHERE TABLE_NAME = 'PROJECTS';
+
+OWNER                          CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+TABLE_NAME                                                                      
+------------------------------                                                  
+SEARCH_CONDITION                                                                
+--------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS  
+------------------------------ ------------------------------ --------- --------
+DEFERRABLE     DEFERRED  VALIDATED     GENERATED      BAD RELY LAST_CHAN        
+-------------- --------- ------------- -------------- --- ---- ---------        
+INDEX_OWNER                    INDEX_NAME                     INVALID           
+------------------------------ ------------------------------ -------           
+VIEW_RELATED                                                                    
+--------------                                                                  
+SCOTT                          SYS_C005702                    C                 
+
+OWNER                          CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+TABLE_NAME                                                                      
+------------------------------                                                  
+SEARCH_CONDITION                                                                
+--------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS  
+------------------------------ ------------------------------ --------- --------
+DEFERRABLE     DEFERRED  VALIDATED     GENERATED      BAD RELY LAST_CHAN        
+-------------- --------- ------------- -------------- --- ---- ---------        
+INDEX_OWNER                    INDEX_NAME                     INVALID           
+------------------------------ ------------------------------ -------           
+VIEW_RELATED                                                                    
+--------------                                                                  
+PROJECTS                                                                        
+
+OWNER                          CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+TABLE_NAME                                                                      
+------------------------------                                                  
+SEARCH_CONDITION                                                                
+--------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS  
+------------------------------ ------------------------------ --------- --------
+DEFERRABLE     DEFERRED  VALIDATED     GENERATED      BAD RELY LAST_CHAN        
+-------------- --------- ------------- -------------- --- ---- ---------        
+INDEX_OWNER                    INDEX_NAME                     INVALID           
+------------------------------ ------------------------------ -------           
+VIEW_RELATED                                                                    
+--------------                                                                  
+"DESCR" IS NOT NULL                                                             
+
+OWNER                          CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+TABLE_NAME                                                                      
+------------------------------                                                  
+SEARCH_CONDITION                                                                
+--------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS  
+------------------------------ ------------------------------ --------- --------
+DEFERRABLE     DEFERRED  VALIDATED     GENERATED      BAD RELY LAST_CHAN        
+-------------- --------- ------------- -------------- --- ---- ---------        
+INDEX_OWNER                    INDEX_NAME                     INVALID           
+------------------------------ ------------------------------ -------           
+VIEW_RELATED                                                                    
+--------------                                                                  
+                                                                        ENABLED 
+
+OWNER                          CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+TABLE_NAME                                                                      
+------------------------------                                                  
+SEARCH_CONDITION                                                                
+--------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS  
+------------------------------ ------------------------------ --------- --------
+DEFERRABLE     DEFERRED  VALIDATED     GENERATED      BAD RELY LAST_CHAN        
+-------------- --------- ------------- -------------- --- ---- ---------        
+INDEX_OWNER                    INDEX_NAME                     INVALID           
+------------------------------ ------------------------------ -------           
+VIEW_RELATED                                                                    
+--------------                                                                  
+NOT DEFERRABLE IMMEDIATE VALIDATED     GENERATED NAME          16-MAY-24        
+
+OWNER                          CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+TABLE_NAME                                                                      
+------------------------------                                                  
+SEARCH_CONDITION                                                                
+--------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS  
+------------------------------ ------------------------------ --------- --------
+DEFERRABLE     DEFERRED  VALIDATED     GENERATED      BAD RELY LAST_CHAN        
+-------------- --------- ------------- -------------- --- ---- ---------        
+INDEX_OWNER                    INDEX_NAME                     INVALID           
+------------------------------ ------------------------------ -------           
+VIEW_RELATED                                                                    
+--------------                                                                  
+                                                                                
+
+OWNER                          CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+TABLE_NAME                                                                      
+------------------------------                                                  
+SEARCH_CONDITION                                                                
+--------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS  
+------------------------------ ------------------------------ --------- --------
+DEFERRABLE     DEFERRED  VALIDATED     GENERATED      BAD RELY LAST_CHAN        
+-------------- --------- ------------- -------------- --- ---- ---------        
+INDEX_OWNER                    INDEX_NAME                     INVALID           
+------------------------------ ------------------------------ -------           
+VIEW_RELATED                                                                    
+--------------                                                                  
+                                                                                
+
+OWNER                          CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+TABLE_NAME                                                                      
+------------------------------                                                  
+SEARCH_CONDITION                                                                
+--------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS  
+------------------------------ ------------------------------ --------- --------
+DEFERRABLE     DEFERRED  VALIDATED     GENERATED      BAD RELY LAST_CHAN        
+-------------- --------- ------------- -------------- --- ---- ---------        
+INDEX_OWNER                    INDEX_NAME                     INVALID           
+------------------------------ ------------------------------ -------           
+VIEW_RELATED                                                                    
+--------------                                                                  
+                                                                                
+
+OWNER                          CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+TABLE_NAME                                                                      
+------------------------------                                                  
+SEARCH_CONDITION                                                                
+--------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS  
+------------------------------ ------------------------------ --------- --------
+DEFERRABLE     DEFERRED  VALIDATED     GENERATED      BAD RELY LAST_CHAN        
+-------------- --------- ------------- -------------- --- ---- ---------        
+INDEX_OWNER                    INDEX_NAME                     INVALID           
+------------------------------ ------------------------------ -------           
+VIEW_RELATED                                                                    
+--------------                                                                  
+SCOTT                          PLANNEDDATE                    C                 
+
+OWNER                          CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+TABLE_NAME                                                                      
+------------------------------                                                  
+SEARCH_CONDITION                                                                
+--------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS  
+------------------------------ ------------------------------ --------- --------
+DEFERRABLE     DEFERRED  VALIDATED     GENERATED      BAD RELY LAST_CHAN        
+-------------- --------- ------------- -------------- --- ---- ---------        
+INDEX_OWNER                    INDEX_NAME                     INVALID           
+------------------------------ ------------------------------ -------           
+VIEW_RELATED                                                                    
+--------------                                                                  
+PROJECTS                                                                        
+
+OWNER                          CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+TABLE_NAME                                                                      
+------------------------------                                                  
+SEARCH_CONDITION                                                                
+--------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS  
+------------------------------ ------------------------------ --------- --------
+DEFERRABLE     DEFERRED  VALIDATED     GENERATED      BAD RELY LAST_CHAN        
+-------------- --------- ------------- -------------- --- ---- ---------        
+INDEX_OWNER                    INDEX_NAME                     INVALID           
+------------------------------ ------------------------------ -------           
+VIEW_RELATED                                                                    
+--------------                                                                  
+PLANNED_END_DATE > ACTUAL_END_DATE                                              
+
+OWNER                          CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+TABLE_NAME                                                                      
+------------------------------                                                  
+SEARCH_CONDITION                                                                
+--------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS  
+------------------------------ ------------------------------ --------- --------
+DEFERRABLE     DEFERRED  VALIDATED     GENERATED      BAD RELY LAST_CHAN        
+-------------- --------- ------------- -------------- --- ---- ---------        
+INDEX_OWNER                    INDEX_NAME                     INVALID           
+------------------------------ ------------------------------ -------           
+VIEW_RELATED                                                                    
+--------------                                                                  
+                                                                        ENABLED 
+
+OWNER                          CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+TABLE_NAME                                                                      
+------------------------------                                                  
+SEARCH_CONDITION                                                                
+--------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS  
+------------------------------ ------------------------------ --------- --------
+DEFERRABLE     DEFERRED  VALIDATED     GENERATED      BAD RELY LAST_CHAN        
+-------------- --------- ------------- -------------- --- ---- ---------        
+INDEX_OWNER                    INDEX_NAME                     INVALID           
+------------------------------ ------------------------------ -------           
+VIEW_RELATED                                                                    
+--------------                                                                  
+NOT DEFERRABLE IMMEDIATE VALIDATED     USER NAME               16-MAY-24        
+
+OWNER                          CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+TABLE_NAME                                                                      
+------------------------------                                                  
+SEARCH_CONDITION                                                                
+--------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS  
+------------------------------ ------------------------------ --------- --------
+DEFERRABLE     DEFERRED  VALIDATED     GENERATED      BAD RELY LAST_CHAN        
+-------------- --------- ------------- -------------- --- ---- ---------        
+INDEX_OWNER                    INDEX_NAME                     INVALID           
+------------------------------ ------------------------------ -------           
+VIEW_RELATED                                                                    
+--------------                                                                  
+                                                                                
+
+OWNER                          CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+TABLE_NAME                                                                      
+------------------------------                                                  
+SEARCH_CONDITION                                                                
+--------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS  
+------------------------------ ------------------------------ --------- --------
+DEFERRABLE     DEFERRED  VALIDATED     GENERATED      BAD RELY LAST_CHAN        
+-------------- --------- ------------- -------------- --- ---- ---------        
+INDEX_OWNER                    INDEX_NAME                     INVALID           
+------------------------------ ------------------------------ -------           
+VIEW_RELATED                                                                    
+--------------                                                                  
+                                                                                
+
+OWNER                          CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+TABLE_NAME                                                                      
+------------------------------                                                  
+SEARCH_CONDITION                                                                
+--------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS  
+------------------------------ ------------------------------ --------- --------
+DEFERRABLE     DEFERRED  VALIDATED     GENERATED      BAD RELY LAST_CHAN        
+-------------- --------- ------------- -------------- --- ---- ---------        
+INDEX_OWNER                    INDEX_NAME                     INVALID           
+------------------------------ ------------------------------ -------           
+VIEW_RELATED                                                                    
+--------------                                                                  
+                                                                                
+
+OWNER                          CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+TABLE_NAME                                                                      
+------------------------------                                                  
+SEARCH_CONDITION                                                                
+--------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS  
+------------------------------ ------------------------------ --------- --------
+DEFERRABLE     DEFERRED  VALIDATED     GENERATED      BAD RELY LAST_CHAN        
+-------------- --------- ------------- -------------- --- ---- ---------        
+INDEX_OWNER                    INDEX_NAME                     INVALID           
+------------------------------ ------------------------------ -------           
+VIEW_RELATED                                                                    
+--------------                                                                  
+SCOTT                          BUDGETCHECK                    C                 
+
+OWNER                          CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+TABLE_NAME                                                                      
+------------------------------                                                  
+SEARCH_CONDITION                                                                
+--------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS  
+------------------------------ ------------------------------ --------- --------
+DEFERRABLE     DEFERRED  VALIDATED     GENERATED      BAD RELY LAST_CHAN        
+-------------- --------- ------------- -------------- --- ---- ---------        
+INDEX_OWNER                    INDEX_NAME                     INVALID           
+------------------------------ ------------------------------ -------           
+VIEW_RELATED                                                                    
+--------------                                                                  
+PROJECTS                                                                        
+
+OWNER                          CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+TABLE_NAME                                                                      
+------------------------------                                                  
+SEARCH_CONDITION                                                                
+--------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS  
+------------------------------ ------------------------------ --------- --------
+DEFERRABLE     DEFERRED  VALIDATED     GENERATED      BAD RELY LAST_CHAN        
+-------------- --------- ------------- -------------- --- ---- ---------        
+INDEX_OWNER                    INDEX_NAME                     INVALID           
+------------------------------ ------------------------------ -------           
+VIEW_RELATED                                                                    
+--------------                                                                  
+BUDGET > 0                                                                      
+
+OWNER                          CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+TABLE_NAME                                                                      
+------------------------------                                                  
+SEARCH_CONDITION                                                                
+--------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS  
+------------------------------ ------------------------------ --------- --------
+DEFERRABLE     DEFERRED  VALIDATED     GENERATED      BAD RELY LAST_CHAN        
+-------------- --------- ------------- -------------- --- ---- ---------        
+INDEX_OWNER                    INDEX_NAME                     INVALID           
+------------------------------ ------------------------------ -------           
+VIEW_RELATED                                                                    
+--------------                                                                  
+                                                                        ENABLED 
+
+OWNER                          CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+TABLE_NAME                                                                      
+------------------------------                                                  
+SEARCH_CONDITION                                                                
+--------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS  
+------------------------------ ------------------------------ --------- --------
+DEFERRABLE     DEFERRED  VALIDATED     GENERATED      BAD RELY LAST_CHAN        
+-------------- --------- ------------- -------------- --- ---- ---------        
+INDEX_OWNER                    INDEX_NAME                     INVALID           
+------------------------------ ------------------------------ -------           
+VIEW_RELATED                                                                    
+--------------                                                                  
+NOT DEFERRABLE IMMEDIATE VALIDATED     USER NAME               16-MAY-24        
+
+OWNER                          CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+TABLE_NAME                                                                      
+------------------------------                                                  
+SEARCH_CONDITION                                                                
+--------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS  
+------------------------------ ------------------------------ --------- --------
+DEFERRABLE     DEFERRED  VALIDATED     GENERATED      BAD RELY LAST_CHAN        
+-------------- --------- ------------- -------------- --- ---- ---------        
+INDEX_OWNER                    INDEX_NAME                     INVALID           
+------------------------------ ------------------------------ -------           
+VIEW_RELATED                                                                    
+--------------                                                                  
+                                                                                
+
+OWNER                          CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+TABLE_NAME                                                                      
+------------------------------                                                  
+SEARCH_CONDITION                                                                
+--------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS  
+------------------------------ ------------------------------ --------- --------
+DEFERRABLE     DEFERRED  VALIDATED     GENERATED      BAD RELY LAST_CHAN        
+-------------- --------- ------------- -------------- --- ---- ---------        
+INDEX_OWNER                    INDEX_NAME                     INVALID           
+------------------------------ ------------------------------ -------           
+VIEW_RELATED                                                                    
+--------------                                                                  
+                                                                                
+
+OWNER                          CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+TABLE_NAME                                                                      
+------------------------------                                                  
+SEARCH_CONDITION                                                                
+--------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS  
+------------------------------ ------------------------------ --------- --------
+DEFERRABLE     DEFERRED  VALIDATED     GENERATED      BAD RELY LAST_CHAN        
+-------------- --------- ------------- -------------- --- ---- ---------        
+INDEX_OWNER                    INDEX_NAME                     INVALID           
+------------------------------ ------------------------------ -------           
+VIEW_RELATED                                                                    
+--------------                                                                  
+                                                                                
+
+OWNER                          CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+TABLE_NAME                                                                      
+------------------------------                                                  
+SEARCH_CONDITION                                                                
+--------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS  
+------------------------------ ------------------------------ --------- --------
+DEFERRABLE     DEFERRED  VALIDATED     GENERATED      BAD RELY LAST_CHAN        
+-------------- --------- ------------- -------------- --- ---- ---------        
+INDEX_OWNER                    INDEX_NAME                     INVALID           
+------------------------------ ------------------------------ -------           
+VIEW_RELATED                                                                    
+--------------                                                                  
+SCOTT                          SYS_C005705                    P                 
+
+OWNER                          CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+TABLE_NAME                                                                      
+------------------------------                                                  
+SEARCH_CONDITION                                                                
+--------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS  
+------------------------------ ------------------------------ --------- --------
+DEFERRABLE     DEFERRED  VALIDATED     GENERATED      BAD RELY LAST_CHAN        
+-------------- --------- ------------- -------------- --- ---- ---------        
+INDEX_OWNER                    INDEX_NAME                     INVALID           
+------------------------------ ------------------------------ -------           
+VIEW_RELATED                                                                    
+--------------                                                                  
+PROJECTS                                                                        
+
+OWNER                          CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+TABLE_NAME                                                                      
+------------------------------                                                  
+SEARCH_CONDITION                                                                
+--------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS  
+------------------------------ ------------------------------ --------- --------
+DEFERRABLE     DEFERRED  VALIDATED     GENERATED      BAD RELY LAST_CHAN        
+-------------- --------- ------------- -------------- --- ---- ---------        
+INDEX_OWNER                    INDEX_NAME                     INVALID           
+------------------------------ ------------------------------ -------           
+VIEW_RELATED                                                                    
+--------------                                                                  
+                                                                                
+
+OWNER                          CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+TABLE_NAME                                                                      
+------------------------------                                                  
+SEARCH_CONDITION                                                                
+--------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS  
+------------------------------ ------------------------------ --------- --------
+DEFERRABLE     DEFERRED  VALIDATED     GENERATED      BAD RELY LAST_CHAN        
+-------------- --------- ------------- -------------- --- ---- ---------        
+INDEX_OWNER                    INDEX_NAME                     INVALID           
+------------------------------ ------------------------------ -------           
+VIEW_RELATED                                                                    
+--------------                                                                  
+                                                                        ENABLED 
+
+OWNER                          CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+TABLE_NAME                                                                      
+------------------------------                                                  
+SEARCH_CONDITION                                                                
+--------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS  
+------------------------------ ------------------------------ --------- --------
+DEFERRABLE     DEFERRED  VALIDATED     GENERATED      BAD RELY LAST_CHAN        
+-------------- --------- ------------- -------------- --- ---- ---------        
+INDEX_OWNER                    INDEX_NAME                     INVALID           
+------------------------------ ------------------------------ -------           
+VIEW_RELATED                                                                    
+--------------                                                                  
+NOT DEFERRABLE IMMEDIATE VALIDATED     GENERATED NAME          16-MAY-24        
+
+OWNER                          CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+TABLE_NAME                                                                      
+------------------------------                                                  
+SEARCH_CONDITION                                                                
+--------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS  
+------------------------------ ------------------------------ --------- --------
+DEFERRABLE     DEFERRED  VALIDATED     GENERATED      BAD RELY LAST_CHAN        
+-------------- --------- ------------- -------------- --- ---- ---------        
+INDEX_OWNER                    INDEX_NAME                     INVALID           
+------------------------------ ------------------------------ -------           
+VIEW_RELATED                                                                    
+--------------                                                                  
+SCOTT                          SYS_C005705                                      
+
+OWNER                          CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+TABLE_NAME                                                                      
+------------------------------                                                  
+SEARCH_CONDITION                                                                
+--------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS  
+------------------------------ ------------------------------ --------- --------
+DEFERRABLE     DEFERRED  VALIDATED     GENERATED      BAD RELY LAST_CHAN        
+-------------- --------- ------------- -------------- --- ---- ---------        
+INDEX_OWNER                    INDEX_NAME                     INVALID           
+------------------------------ ------------------------------ -------           
+VIEW_RELATED                                                                    
+--------------                                                                  
+                                                                                
+
+OWNER                          CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+TABLE_NAME                                                                      
+------------------------------                                                  
+SEARCH_CONDITION                                                                
+--------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS  
+------------------------------ ------------------------------ --------- --------
+DEFERRABLE     DEFERRED  VALIDATED     GENERATED      BAD RELY LAST_CHAN        
+-------------- --------- ------------- -------------- --- ---- ---------        
+INDEX_OWNER                    INDEX_NAME                     INVALID           
+------------------------------ ------------------------------ -------           
+VIEW_RELATED                                                                    
+--------------                                                                  
+                                                                                
+
+OWNER                          CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+TABLE_NAME                                                                      
+------------------------------                                                  
+SEARCH_CONDITION                                                                
+--------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS  
+------------------------------ ------------------------------ --------- --------
+DEFERRABLE     DEFERRED  VALIDATED     GENERATED      BAD RELY LAST_CHAN        
+-------------- --------- ------------- -------------- --- ---- ---------        
+INDEX_OWNER                    INDEX_NAME                     INVALID           
+------------------------------ ------------------------------ -------           
+VIEW_RELATED                                                                    
+--------------                                                                  
+SCOTT                          FKCLIENTID                     R                 
+
+OWNER                          CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+TABLE_NAME                                                                      
+------------------------------                                                  
+SEARCH_CONDITION                                                                
+--------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS  
+------------------------------ ------------------------------ --------- --------
+DEFERRABLE     DEFERRED  VALIDATED     GENERATED      BAD RELY LAST_CHAN        
+-------------- --------- ------------- -------------- --- ---- ---------        
+INDEX_OWNER                    INDEX_NAME                     INVALID           
+------------------------------ ------------------------------ -------           
+VIEW_RELATED                                                                    
+--------------                                                                  
+PROJECTS                                                                        
+
+OWNER                          CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+TABLE_NAME                                                                      
+------------------------------                                                  
+SEARCH_CONDITION                                                                
+--------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS  
+------------------------------ ------------------------------ --------- --------
+DEFERRABLE     DEFERRED  VALIDATED     GENERATED      BAD RELY LAST_CHAN        
+-------------- --------- ------------- -------------- --- ---- ---------        
+INDEX_OWNER                    INDEX_NAME                     INVALID           
+------------------------------ ------------------------------ -------           
+VIEW_RELATED                                                                    
+--------------                                                                  
+                                                                                
+
+OWNER                          CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+TABLE_NAME                                                                      
+------------------------------                                                  
+SEARCH_CONDITION                                                                
+--------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS  
+------------------------------ ------------------------------ --------- --------
+DEFERRABLE     DEFERRED  VALIDATED     GENERATED      BAD RELY LAST_CHAN        
+-------------- --------- ------------- -------------- --- ---- ---------        
+INDEX_OWNER                    INDEX_NAME                     INVALID           
+------------------------------ ------------------------------ -------           
+VIEW_RELATED                                                                    
+--------------                                                                  
+SCOTT                          SYS_C005694                    NO ACTION ENABLED 
+
+OWNER                          CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+TABLE_NAME                                                                      
+------------------------------                                                  
+SEARCH_CONDITION                                                                
+--------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS  
+------------------------------ ------------------------------ --------- --------
+DEFERRABLE     DEFERRED  VALIDATED     GENERATED      BAD RELY LAST_CHAN        
+-------------- --------- ------------- -------------- --- ---- ---------        
+INDEX_OWNER                    INDEX_NAME                     INVALID           
+------------------------------ ------------------------------ -------           
+VIEW_RELATED                                                                    
+--------------                                                                  
+NOT DEFERRABLE IMMEDIATE VALIDATED     USER NAME               16-MAY-24        
+
+OWNER                          CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+TABLE_NAME                                                                      
+------------------------------                                                  
+SEARCH_CONDITION                                                                
+--------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS  
+------------------------------ ------------------------------ --------- --------
+DEFERRABLE     DEFERRED  VALIDATED     GENERATED      BAD RELY LAST_CHAN        
+-------------- --------- ------------- -------------- --- ---- ---------        
+INDEX_OWNER                    INDEX_NAME                     INVALID           
+------------------------------ ------------------------------ -------           
+VIEW_RELATED                                                                    
+--------------                                                                  
+                                                                                
+
+OWNER                          CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+TABLE_NAME                                                                      
+------------------------------                                                  
+SEARCH_CONDITION                                                                
+--------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS  
+------------------------------ ------------------------------ --------- --------
+DEFERRABLE     DEFERRED  VALIDATED     GENERATED      BAD RELY LAST_CHAN        
+-------------- --------- ------------- -------------- --- ---- ---------        
+INDEX_OWNER                    INDEX_NAME                     INVALID           
+------------------------------ ------------------------------ -------           
+VIEW_RELATED                                                                    
+--------------                                                                  
+                                                                                
+
+OWNER                          CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+TABLE_NAME                                                                      
+------------------------------                                                  
+SEARCH_CONDITION                                                                
+--------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS  
+------------------------------ ------------------------------ --------- --------
+DEFERRABLE     DEFERRED  VALIDATED     GENERATED      BAD RELY LAST_CHAN        
+-------------- --------- ------------- -------------- --- ---- ---------        
+INDEX_OWNER                    INDEX_NAME                     INVALID           
+------------------------------ ------------------------------ -------           
+VIEW_RELATED                                                                    
+--------------                                                                  
+                                                                                
+
+SQL> SET PAGES 150 LINES 150
+SQL> /
+
+OWNER                          CONSTRAINT_NAME                C TABLE_NAME                                                                            
+------------------------------ ------------------------------ - ------------------------------                                                        
+SEARCH_CONDITION                                                                 R_OWNER                        R_CONSTRAINT_NAME                     
+-------------------------------------------------------------------------------- ------------------------------ ------------------------------        
+DELETE_RU STATUS   DEFERRABLE     DEFERRED  VALIDATED     GENERATED      BAD RELY LAST_CHAN INDEX_OWNER                                               
+--------- -------- -------------- --------- ------------- -------------- --- ---- --------- ------------------------------                            
+INDEX_NAME                     INVALID VIEW_RELATED                                                                                                   
+------------------------------ ------- --------------                                                                                                 
+SCOTT                          SYS_C005702                    C PROJECTS                                                                              
+"DESCR" IS NOT NULL                                                                                                                                   
+          ENABLED  NOT DEFERRABLE IMMEDIATE VALIDATED     GENERATED NAME          16-MAY-24                                                           
+                                                                                                                                                      
+                                                                                                                                                      
+SCOTT                          PLANNEDDATE                    C PROJECTS                                                                              
+PLANNED_END_DATE > ACTUAL_END_DATE                                                                                                                    
+          ENABLED  NOT DEFERRABLE IMMEDIATE VALIDATED     USER NAME               16-MAY-24                                                           
+                                                                                                                                                      
+                                                                                                                                                      
+SCOTT                          BUDGETCHECK                    C PROJECTS                                                                              
+BUDGET > 0                                                                                                                                            
+          ENABLED  NOT DEFERRABLE IMMEDIATE VALIDATED     USER NAME               16-MAY-24                                                           
+                                                                                                                                                      
+                                                                                                                                                      
+SCOTT                          SYS_C005705                    P PROJECTS                                                                              
+                                                                                                                                                      
+          ENABLED  NOT DEFERRABLE IMMEDIATE VALIDATED     GENERATED NAME          16-MAY-24 SCOTT                                                     
+SYS_C005705                                                                                                                                           
+                                                                                                                                                      
+SCOTT                          FKCLIENTID                     R PROJECTS                                                                              
+                                                                                 SCOTT                          SYS_C005694                           
+NO ACTION ENABLED  NOT DEFERRABLE IMMEDIATE VALIDATED     USER NAME               16-MAY-24                                                           
+                                                                                                                                                      
+                                                                                                                                                      
+
+SQL> SET PAGES 100 LINES 100
+SQL> /
+
+OWNER                          CONSTRAINT_NAME                C TABLE_NAME                          
+------------------------------ ------------------------------ - ------------------------------      
+SEARCH_CONDITION                                                                                    
+--------------------------------------------------------------------------------                    
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS   DEFERRABLE         
+------------------------------ ------------------------------ --------- -------- --------------     
+DEFERRED  VALIDATED     GENERATED      BAD RELY LAST_CHAN INDEX_OWNER                               
+--------- ------------- -------------- --- ---- --------- ------------------------------            
+INDEX_NAME                     INVALID VIEW_RELATED                                                 
+------------------------------ ------- --------------                                               
+SCOTT                          SYS_C005702                    C PROJECTS                            
+"DESCR" IS NOT NULL                                                                                 
+                                                                        ENABLED  NOT DEFERRABLE     
+IMMEDIATE VALIDATED     GENERATED NAME          16-MAY-24                                           
+                                                                                                    
+                                                                                                    
+SCOTT                          PLANNEDDATE                    C PROJECTS                            
+PLANNED_END_DATE > ACTUAL_END_DATE                                                                  
+                                                                        ENABLED  NOT DEFERRABLE     
+IMMEDIATE VALIDATED     USER NAME               16-MAY-24                                           
+                                                                                                    
+                                                                                                    
+SCOTT                          BUDGETCHECK                    C PROJECTS                            
+BUDGET > 0                                                                                          
+                                                                        ENABLED  NOT DEFERRABLE     
+IMMEDIATE VALIDATED     USER NAME               16-MAY-24                                           
+                                                                                                    
+                                                                                                    
+SCOTT                          SYS_C005705                    P PROJECTS                            
+                                                                                                    
+                                                                        ENABLED  NOT DEFERRABLE     
+IMMEDIATE VALIDATED     GENERATED NAME          16-MAY-24 SCOTT                                     
+SYS_C005705                                                                                         
+                                                                                                    
+SCOTT                          FKCLIENTID                     R PROJECTS                            
+                                                                                                    
+SCOTT                          SYS_C005694                    NO ACTION ENABLED  NOT DEFERRABLE     
+IMMEDIATE VALIDATED     USER NAME               16-MAY-24                                           
+                                                                                                    
+                                                                                                    
+
+SQL> SET PAGES 500 LINES 500
+SQL> /
+
+OWNER                          CONSTRAINT_NAME                C TABLE_NAME                     SEARCH_CONDITION                                                                 R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS   DEFERRABLE     DEFERRED  VALIDATED     GENERATED      BAD RELY LAST_CHAN INDEX_OWNER                    INDEX_NAME                     INVALID VIEW_RELATED                                                                                        
+------------------------------ ------------------------------ - ------------------------------ -------------------------------------------------------------------------------- ------------------------------ ------------------------------ --------- -------- -------------- --------- ------------- -------------- --- ---- --------- ------------------------------ ------------------------------ ------- --------------                                                                                      
+SCOTT                          SYS_C005702                    C PROJECTS                       "DESCR" IS NOT NULL                                                                                                                                      ENABLED  NOT DEFERRABLE IMMEDIATE VALIDATED     GENERATED NAME          16-MAY-24                                                                                                                                                                           
+SCOTT                          PLANNEDDATE                    C PROJECTS                       PLANNED_END_DATE > ACTUAL_END_DATE                                                                                                                       ENABLED  NOT DEFERRABLE IMMEDIATE VALIDATED     USER NAME               16-MAY-24                                                                                                                                                                           
+SCOTT                          BUDGETCHECK                    C PROJECTS                       BUDGET > 0                                                                                                                                               ENABLED  NOT DEFERRABLE IMMEDIATE VALIDATED     USER NAME               16-MAY-24                                                                                                                                                                           
+SCOTT                          SYS_C005705                    P PROJECTS                                                                                                                                                                                ENABLED  NOT DEFERRABLE IMMEDIATE VALIDATED     GENERATED NAME          16-MAY-24 SCOTT                          SYS_C005705                                                                                                                                
+SCOTT                          FKCLIENTID                     R PROJECTS                                                                                                        SCOTT                          SYS_C005694                    NO ACTION ENABLED  NOT DEFERRABLE IMMEDIATE VALIDATED     USER NAME               16-MAY-24                                                                                                                                                                           
+
+SQL> ALTER TABLE PROJECTS DROP CONSTRAINTS  PLANNEDDATE;
+
+Table altered.
+
+SQL> ALTER TABLE PROJECTS
+  2   ADD CONSTRAINT CHECKACTUAL CHECK(PLANNED_END_DATE < ACTUAL_END_DATE)
+  3  ;
+
+Table altered.
+
+SQL> INSERT INTO PROJECTS (PROJECTID,DESCR,START_DATE,PLANNED_END_DATE,ACTUAL_END_DATE,BUDGET,CLIENTD) VALUES (401,'INVENTORY','01-APR-11','01-OCT-11','31-OCT-11',150000,1001);
+INSERT INTO PROJECTS (PROJECTID,DESCR,START_DATE,PLANNED_END_DATE,ACTUAL_END_DATE,BUDGET,CLIENTD) VALUES (401,'INVENTORY','01-APR-11','01-OCT-11','31-OCT-11',150000,1001)
+                                                                                         *
+ERROR at line 1:
+ORA-00904: "CLIENTD": invalid identifier 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1* INSERT INTO PROJECTS (PROJECTID,DESCR,START_DATE,PLANNED_END_DATE,ACTUAL_END_DATE,BUDGET,CLIENTID) VALUES (401,'INVENTORY','01-APR-11','01-OCT-11','31-OCT-11',150000,1001)
+SQL> /
+
+1 row created.
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  INSERT INTO PROJECTS (
+  2  PROJECTID,DESCR,START_DATE,PLANNED_END_DATE,BUDGET,CLIENTID) 
+  3* VALUES (402,'ACCOUNTING','01-AUG-11','01-JAN-12','31-OCT-11',500000,1002)
+SQL> /
+INSERT INTO PROJECTS (
+            *
+ERROR at line 1:
+ORA-00913: too many values 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  INSERT INTO PROJECTS (
+  2  PROJECTID,DESCR,START_DATE,PLANNED_END_DATE,BUDGET,CLIENTID) 
+  3* VALUES (402,'ACCOUNTING','01-AUG-11','01-JAN-12',500000,1002)
+SQL> /
+
+1 row created.
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  INSERT INTO PROJECTS (
+  2  PROJECTID,DESCR,START_DATE,PLANNED_END_DATE,BUDGET,CLIENTID) 
+  3* VALUES (403,'PAYROLL','01-OCT-11','31-DEC-11',75000,1003)
+SQL> /
+
+1 row created.
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  INSERT INTO PROJECTS (
+  2  PROJECTID,DESCR,START_DATE,PLANNED_END_DATE,BUDGET,CLIENTID) 
+  3* VALUES (404,'CONTACT MGMT','01-NOV-11','31-DEC-11',50000,1004)
+SQL> /
+
+1 row created.
+
+SQL> SELECT * FROM TAB;
+
+TNAME                          TABTYPE  CLUSTERID                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+------------------------------ ------- ----------                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+DEPT                           TABLE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+EMP                            TABLE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+BONUS                          TABLE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+SALGRADE                       TABLE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+CLIENTS                        TABLE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+DEPARTMENT                     TABLE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+EMPLOYEES                      TABLE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+PROJECTS                       TABLE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+EMPPROJECTTASK                 TABLE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+STUDENT                        TABLE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+STUDENTDETAIL                  TABLE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+LIBRARY                        TABLE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+
+12 rows selected.
+
+SQL> INSERT INTO EMPPROJECTTASK (PROJECTID,EMPNO,START_DATE,END_DATE,TASK,STATUS)
+  2  VALUES(401,7001,'01-APR-11','20-APR-11','SYSTEM ANALYSIS','COMPLETED');
+
+1 row created.
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  INSERT INTO EMPPROJECTTASK (PROJECTID,EMPNO,START_DATE,END_DATE,TASK,STATUS)
+  2* VALUES(402,7002,'21-APR-11','30-MAY-11','SYSTEM DESIGN','COMPLETED')
+SQL> /
+
+1 row created.
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  INSERT INTO EMPPROJECTTASK (PROJECTID,EMPNO,START_DATE,END_DATE,TASK,STATUS)
+  2* VALUES(401,7003,'01-JUN-11','15-JUL-11','CODING','COMPLETED')
+SQL> /
+
+1 row created.
+
+SQL> UPDATE EMPPROJECTTASK
+  2  SET PROJECTID = 401
+  3  WHERE EMPNO = 7002;
+
+1 row updated.
+
+SQL> SELECT * FROM EMPPROJECTTASK;
+
+ PROJECTID      EMPNO START_DAT END_DATE  TASK                      STATUS                                                                                                                                                                                                                                                                                                                                                                                                                                          
+---------- ---------- --------- --------- ------------------------- ---------------                                                                                                                                                                                                                                                                                                                                                                                                                                 
+       401       7001 01-APR-11 20-APR-11 SYSTEM ANALYSIS           COMPLETED                                                                                                                                                                                                                                                                                                                                                                                                                                       
+       401       7002 21-APR-11 30-MAY-11 SYSTEM DESIGN             COMPLETED                                                                                                                                                                                                                                                                                                                                                                                                                                       
+       401       7003 01-JUN-11 15-JUL-11 CODING                    COMPLETED                                                                                                                                                                                                                                                                                                                                                                                                                                       
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  INSERT INTO EMPPROJECTTASK (PROJECTID,EMPNO,START_DATE,END_DATE,TASK,STATUS)
+  2* VALUES(401,7004,'18-JUL-11','01-SEP-11','CODING','COMPLETED')
+SQL> /
+
+1 row created.
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  INSERT INTO EMPPROJECTTASK (PROJECTID,EMPNO,START_DATE,END_DATE,TASK,STATUS)
+  2* VALUES(401,7006,'03-SEP-11','15-SEP-11','TESTING','COMPLETED')
+SQL> /
+
+1 row created.
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  INSERT INTO EMPPROJECTTASK (PROJECTID,EMPNO,START_DATE,END_DATE,TASK,STATUS)
+  2* VALUES(401,7009,'18-SEP-11','05-OCT-11','CODE CHANGE','COMPLETED')
+SQL> /
+
+1 row created.
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  INSERT INTO EMPPROJECTTASK (PROJECTID,EMPNO,START_DATE,END_DATE,TASK,STATUS)
+  2* VALUES(401,7008,'06-OCT-11','16-OCT-11','TESTING','COMPLETED')
+SQL> /
+
+1 row created.
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  INSERT INTO EMPPROJECTTASK (PROJECTID,EMPNO,START_DATE,END_DATE,TASK,STATUS)
+  2* VALUES(401,7007,'06-OCT-11','22-OCT-11','DOCUMENTATION','COMPLETED')
+SQL> /
+
+1 row created.
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  INSERT INTO EMPPROJECTTASK (PROJECTID,EMPNO,START_DATE,END_DATE,TASK,STATUS)
+  2* VALUES(401,7011,'22-OCT-11','31-OCT-11','SIGN OFF','COMPLETED')
+SQL> /
+
+1 row created.
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  INSERT INTO EMPPROJECTTASK (PROJECTID,EMPNO,START_DATE,END_DATE,TASK,STATUS)
+  2* VALUES(401,7010,'01-AUG-11','20-AUG-11','SYSTEM ANALYSIS','COMPLETED')
+SQL> /
+
+1 row created.
+
+SQL> UPDATE INSERT INTO EMPPROJECTTASK (PROJECTID,EMPNO,START_DATE,END_DATE,TASK,STATUS)
+  2  
+SQL> ''
+SP2-0042: unknown command "''" - rest of line ignored.
+SQL> UPDATE EMPPROJECTTASK
+  2  SET PROJECTID = 402
+  3  WHERE EMPNO = 7010;
+
+1 row updated.
+
+SQL> INSERT INTO EMPPROJECTTASK (PROJECTID,EMPNO,START_DATE,END_DATE,TASK,STATUS)
+  2  VALUES(402,7002.'22-AUG-11','30-SEP-11','SYSTEM DESIGN','COMPLETED');
+VALUES(402,7002.'22-AUG-11','30-SEP-11','SYSTEM DESIGN','COMPLETED')
+                *
+ERROR at line 2:
+ORA-00917: missing comma 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  INSERT INTO EMPPROJECTTASK (PROJECTID,EMPNO,START_DATE,END_DATE,TASK,STATUS)
+  2* VALUES(402,7002,'22-AUG-11','30-SEP-11','SYSTEM DESIGN','COMPLETED')
+SQL> /
+
+1 row created.
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  INSERT INTO EMPPROJECTTASK (PROJECTID,EMPNO,START_DATE,TASK,STATUS)
+  2* VALUES(402,7004,'01-OCT-11','CODING','IN PROGRESS')
+SQL> /
+
+1 row created.
+
+SQL> SELECT * FROM TAB;
+
+TNAME                          TABTYPE  CLUSTERID                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+------------------------------ ------- ----------                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+DEPT                           TABLE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+EMP                            TABLE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+BONUS                          TABLE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+SALGRADE                       TABLE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+CLIENTS                        TABLE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+DEPARTMENT                     TABLE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+EMPLOYEES                      TABLE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+PROJECTS                       TABLE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+EMPPROJECTTASK                 TABLE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+STUDENT                        TABLE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+STUDENTDETAIL                  TABLE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+LIBRARY                        TABLE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+
+12 rows selected.
+
+SQL> SELECT * FROM CLIENTS;
+
+  CLIENTID CNAME                                    ADDRESS                        EMAIL                               PHONE BUSINESS                                                                                                                                                                                                                                                                                                                                                                               
+---------- ---------------------------------------- ------------------------------ ------------------------------ ---------- --------------------                                                                                                                                                                                                                                                                                                                                                                   
+      1001 ACME UTILITIES                           NOIDA                          contact@acmeutil.com           9567880032 MANUFACTURING                                                                                                                                                                                                                                                                                                                                                                          
+      1002 TRACKON CONSULTANTS                      MUMBAI                         consult@trackon.com            8734210090 CONSULTANT                                                                                                                                                                                                                                                                                                                                                                             
+      1003 MONEYSAVERDISTRIBUTORS                   KOLKATA                        save@moneysaver.com            7799886655 RESELLER                                                                                                                                                                                                                                                                                                                                                                               
+      1004 LAWFUL CORP                              CHENNAI                        justice@lawful.com             9210342219 PROFESSIONAL                                                                                                                                                                                                                                                                                                                                                                           
+
+SQL> SELECT * FROM DEPARTMENT;
+
+    DEPTNO DNAME           LOC                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+---------- --------------- --------------------                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+        10 DESIGN          PUNE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+        20 DEVELOPMENT     PUNE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+        30 TESTING         MUMBAI                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+        40 DOCUMENT        MUMBAI                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+
+SQL> SELECT * FROM EMPLOYEES;
+
+     EMPNO ENAME                JOB                 SALARY     DEPTNO                                                                                                                                                                                                                                                                                                                                                                                                                                               
+---------- -------------------- --------------- ---------- ----------                                                                                                                                                                                                                                                                                                                                                                                                                                               
+      7001 SANDEEP              ANALYST              25000         10                                                                                                                                                                                                                                                                                                                                                                                                                                               
+      7002 RAJESH               DESIGNER             30000         10                                                                                                                                                                                                                                                                                                                                                                                                                                               
+      7003 MADHAV               DEVELOPER            40000         20                                                                                                                                                                                                                                                                                                                                                                                                                                               
+      7004 MANOJ                DEVELOPER            40000         20                                                                                                                                                                                                                                                                                                                                                                                                                                               
+      7005 ABHAY                DESIGNER             35000         10                                                                                                                                                                                                                                                                                                                                                                                                                                               
+      7006 UMA                  TESTER               30000         30                                                                                                                                                                                                                                                                                                                                                                                                                                               
+      7007 GITA                 TECHWRITER           30000         40                                                                                                                                                                                                                                                                                                                                                                                                                                               
+      7008 PRIYA                TESTER               35000         30                                                                                                                                                                                                                                                                                                                                                                                                                                               
+      7009 NUTAN                DEVELOPER            45000         20                                                                                                                                                                                                                                                                                                                                                                                                                                               
+      7010 SMITA                ANALYST              20000         10                                                                                                                                                                                                                                                                                                                                                                                                                                               
+      7011 ANAND                PROJECTMGR           65000         10                                                                                                                                                                                                                                                                                                                                                                                                                                               
+
+11 rows selected.
+
+SQL> SELECT * FROM PROJECTS;
+
+ PROJECTID DESCR                          START_DAT PLANNED_E ACTUAL_EN     BUDGET   CLIENTID                                                                                                                                                                                                                                                                                                                                                                                                                       
+---------- ------------------------------ --------- --------- --------- ---------- ----------                                                                                                                                                                                                                                                                                                                                                                                                                       
+       401 INVENTORY                      01-APR-11 01-OCT-11 31-OCT-11     150000       1001                                                                                                                                                                                                                                                                                                                                                                                                                       
+       402 ACCOUNTING                     01-AUG-11 01-JAN-12               500000       1002                                                                                                                                                                                                                                                                                                                                                                                                                       
+       403 PAYROLL                        01-OCT-11 31-DEC-11                75000       1003                                                                                                                                                                                                                                                                                                                                                                                                                       
+       404 CONTACT MGMT                   01-NOV-11 31-DEC-11                50000       1004                                                                                                                                                                                                                                                                                                                                                                                                                       
+
+SQL> SELECT * FROM EMPPROJECTTASK;
+
+ PROJECTID      EMPNO START_DAT END_DATE  TASK                      STATUS                                                                                                                                                                                                                                                                                                                                                                                                                                          
+---------- ---------- --------- --------- ------------------------- ---------------                                                                                                                                                                                                                                                                                                                                                                                                                                 
+       401       7001 01-APR-11 20-APR-11 SYSTEM ANALYSIS           COMPLETED                                                                                                                                                                                                                                                                                                                                                                                                                                       
+       401       7002 21-APR-11 30-MAY-11 SYSTEM DESIGN             COMPLETED                                                                                                                                                                                                                                                                                                                                                                                                                                       
+       401       7003 01-JUN-11 15-JUL-11 CODING                    COMPLETED                                                                                                                                                                                                                                                                                                                                                                                                                                       
+       401       7004 18-JUL-11 01-SEP-11 CODING                    COMPLETED                                                                                                                                                                                                                                                                                                                                                                                                                                       
+       401       7006 03-SEP-11 15-SEP-11 TESTING                   COMPLETED                                                                                                                                                                                                                                                                                                                                                                                                                                       
+       401       7009 18-SEP-11 05-OCT-11 CODE CHANGE               COMPLETED                                                                                                                                                                                                                                                                                                                                                                                                                                       
+       401       7008 06-OCT-11 16-OCT-11 TESTING                   COMPLETED                                                                                                                                                                                                                                                                                                                                                                                                                                       
+       401       7007 06-OCT-11 22-OCT-11 DOCUMENTATION             COMPLETED                                                                                                                                                                                                                                                                                                                                                                                                                                       
+       401       7011 22-OCT-11 31-OCT-11 SIGN OFF                  COMPLETED                                                                                                                                                                                                                                                                                                                                                                                                                                       
+       402       7010 01-AUG-11 20-AUG-11 SYSTEM ANALYSIS           COMPLETED                                                                                                                                                                                                                                                                                                                                                                                                                                       
+       402       7002 22-AUG-11 30-SEP-11 SYSTEM DESIGN             COMPLETED                                                                                                                                                                                                                                                                                                                                                                                                                                       
+       402       7004 01-OCT-11           CODING                    IN PROGRESS                                                                                                                                                                                                                                                                                                                                                                                                                                     
+
+12 rows selected.
+
+SQL> SPOOL OFF

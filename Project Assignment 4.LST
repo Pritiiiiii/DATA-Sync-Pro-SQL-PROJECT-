@@ -1,0 +1,153 @@
+SQL> SELECT *
+  2  FROM (SELECT DENSE_RANK() OVER(ORDER BY BUDGET DESC) AS DRANK,DESCR,BUDGET FROM PROJECTS )
+  3   WHERE DRANK = 1;
+
+     DRANK DESCR                              BUDGET                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+---------- ------------------------------ ----------                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+         1 ACCOUNTING                         500000                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+
+SQL> SELECT ENAME
+  2  FROM EMPLOYEES
+  3  WHERE JOB IN (SELECT JOB FROM EMPLOYEES WHERE ENAME = 'MADHAV');
+
+ENAME                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+--------------------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+NUTAN                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+MANOJ                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+MADHAV                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+
+SQL> SELECT ENAME,JOB
+  2  FROM EMPLOYEES
+  3  WHERE EMPNO IN (SELECT EMPNO FROM EMPPROJECTTASK
+  4  WHERE TASK = 'CODE CHANGE' AND PROJECTID = 401);
+
+ENAME                JOB                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+-------------------- ---------------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+NUTAN                DEVELOPER                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+
+SQL> SELECT CNAME
+  2  FROM CLIENTS
+  3  WHERE CLIENTID IN (SELECT CLIENTID FROM PROJECTS
+  4  WHERE PROJECTID IN (SELECT PROJECTID FROM EMPPROJECTTASK
+  5  WHERE TASK = 'CODING' AND STATUS = 'IN PROGRESS'));
+
+CNAME                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+----------------------------------------                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+TRACKON CONSULTANTS                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+
+SQL> SELECT D.DEPTNO,D.DNAME,E.SALARY
+  2  FROM EMPLOYEES E INNER JOIN DEPARTMENT D
+  3  ON  E.DEPTNO = D.DEPTNO
+  4  WHERE E.SALARY IN (SELECT MAX(SALARY) FROM EMPLOYEES GROUP BY DEPTNO);
+
+    DEPTNO DNAME               SALARY                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+---------- --------------- ----------                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+        30 TESTING              35000                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+        10 DESIGN               35000                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+        20 DEVELOPMENT          45000                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+        40 DOCUMENT             30000                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+        30 TESTING              30000                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+        10 DESIGN               30000                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+        10 DESIGN               65000                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+
+7 rows selected.
+
+SQL> SELECT D.DEPTNO,D.DNAME,MAX(SALARY) SALARY
+  2  FROM EMPLOYEES E INNER JOIN DEPARTMENT D
+  3  ON E.DEPTNO = D.DEPTNO
+  4  GROUP BY D.DEPTNO,D.DNAME;
+
+    DEPTNO DNAME               SALARY                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+---------- --------------- ----------                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+        20 DEVELOPMENT          45000                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+        10 DESIGN               65000                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+        30 TESTING              35000                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+        40 DOCUMENT             30000                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+
+SQL> SELECT D.DNAME
+  2  FROM DEPARTMENT D INNER JOIN EMPLOYEES E
+  3  ON D.DEPTNO =  E.DEPTNO
+  4  WHERE E.SALARY IN (SELECT MAX(SALARY) FROM EMPLOYEES
+  5  WHERE E.SALARY IN(SELECT SUM(SALARY) FROM EMPLOYEES GROUP BY DEPTNO));
+
+DNAME                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+---------------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+DESIGN                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+
+SQL> CREATE TABLE CLIENTS_PROJECT AS
+  2  SELECT C.CLIENTID CLIENTID,C.CNAME CNAME,C.ADDRESS ADDRESS,C.BUSINESS BUSINESS,
+  3  P.DESCR DESCR,P.BUDGET BUDGET
+  4  FROM CLIENTS C INNER JOIN PROJECTS P
+  5  ON C.CLIENTID = P.CLIENTID;
+
+Table created.
+
+SQL> SELECT * FROM CLIENTS_PROJECT;
+
+  CLIENTID CNAME                                    ADDRESS                        BUSINESS             DESCR                              BUDGET                                                                                                                                                                                                                                                                                                                                                                   
+---------- ---------------------------------------- ------------------------------ -------------------- ------------------------------ ----------                                                                                                                                                                                                                                                                                                                                                                   
+      1001 ACME UTILITIES                           NOIDA                          MANUFACTURING        INVENTORY                          150000                                                                                                                                                                                                                                                                                                                                                                   
+      1002 TRACKON CONSULTANTS                      MUMBAI                         CONSULTANT           ACCOUNTING                         500000                                                                                                                                                                                                                                                                                                                                                                   
+      1003 MONEYSAVERDISTRIBUTORS                   KOLKATA                        RESELLER             PAYROLL                             75000                                                                                                                                                                                                                                                                                                                                                                   
+      1004 LAWFUL CORP                              CHENNAI                        PROFESSIONAL         CONTACT MGMT                        50000                                                                                                                                                                                                                                                                                                                                                                   
+
+SQL> CREATE VIEW DEPT_EMP AS
+  2  SELSPOOLECT D.DEPTNO,D.DNAME,D.LOC,E.ENAME,E.JOB,E.SALARY
+  3  FROM SCOTT.DEPARTMENT D JOIN SCOTT.EMPLOYEES E
+  4  ON D.DEPTNO = E.DEPTNO;
+SELSPOOLECT D.DEPTNO,D.DNAME,D.LOC,E.ENAME,E.JOB,E.SALARY
+*
+ERROR at line 2:
+ORA-00928: missing SELECT keyword 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  CREATE VIEW DEPT_EMP AS
+  2  SELECT D.DEPTNO,D.DNAME,D.LOC,E.ENAME,E.JOB,E.SALARY
+  3  FROM SCOTT.DEPARTMENT D JOIN SCOTT.EMPLOYEES E
+  4* ON D.DEPTNO = E.DEPTNO
+SQL> /
+CREATE VIEW DEPT_EMP AS
+            *
+ERROR at line 1:
+ORA-01031: insufficient privileges 
+
+
+SQL> CONNECT SYS AS SYSDBA
+Connected.
+SQL> GRANT SYSDBA TO SCOTT;
+
+Grant succeeded.
+
+SQL> CREATE VIEW DEPTS_EMPS AS
+  2  SELECT D.DEPTNO,D.DNAME,D.LOC,E.ENAME,E.JOB,E.SALARY
+  3  FROM SCOTT.DEPARTMENT D JOIN SCOTT.EMPLOYEES E
+  4  ON D.DEPTNO = E.DEPTNO;
+
+View created.
+
+SQL> SELECT * FROM DEPTS_EMPS;
+
+    DEPTNO DNAME           LOC                  ENAME                JOB                 SALARY                                                                                                                                                                                                                                                                                                                                                                                                                     
+---------- --------------- -------------------- -------------------- --------------- ----------                                                                                                                                                                                                                                                                                                                                                                                                                     
+        10 DESIGN          PUNE                 SANDEEP              ANALYST              25000                                                                                                                                                                                                                                                                                                                                                                                                                     
+        10 DESIGN          PUNE                 RAJESH               DESIGNER             30000                                                                                                                                                                                                                                                                                                                                                                                                                     
+        20 DEVELOPMENT     PUNE                 MADHAV               DEVELOPER            36197                                                                                                                                                                                                                                                                                                                                                                                                                     
+        20 DEVELOPMENT     PUNE                 MANOJ                DEVELOPER            36197                                                                                                                                                                                                                                                                                                                                                                                                                     
+        10 DESIGN          PUNE                 ABHAY                DESIGNER             35000                                                                                                                                                                                                                                                                                                                                                                                                                     
+        30 TESTING         MUMBAI               UMA                  TESTER               30000                                                                                                                                                                                                                                                                                                                                                                                                                     
+        40 DOCUMENT        MUMBAI               GITA                 TECHWRITER           30000                                                                                                                                                                                                                                                                                                                                                                                                                     
+        30 TESTING         MUMBAI               PRIYA                TESTER               35000                                                                                                                                                                                                                                                                                                                                                                                                                     
+        20 DEVELOPMENT     PUNE                 NUTAN                DEVELOPER            45000                                                                                                                                                                                                                                                                                                                                                                                                                     
+        10 DESIGN          PUNE                 SMITA                ANALYST              20000                                                                                                                                                                                                                                                                                                                                                                                                                     
+        10 DESIGN          PUNE                 ANAND                PROJECTMGR           65000                                                                                                                                                                                                                                                                                                                                                                                                                     
+
+11 rows selected.
+
+SQL> CREATE SYNONYM EPTs FOR SCHEMA.EMPPROJECTTASK;
+
+Synonym created.
+
+SQL> SPOOL OFF
